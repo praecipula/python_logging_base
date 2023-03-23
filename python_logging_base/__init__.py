@@ -428,7 +428,7 @@ root:
 logging.config.dictConfig(yaml.load(logConfig, Loader=yaml.FullLoader))
 
 # Test out logging level printing / report to terminal what they look like
-LOG = logging.getLogger("base.LOG")
+LOG = logging.getLogger("python_logging_base.LOG")
 LOG.trace("This is a TRACE message")
 LOG.debug("This is a DEBUG message")
 LOG.info("This is a INFO message")
