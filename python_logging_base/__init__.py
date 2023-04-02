@@ -417,9 +417,13 @@ handlers:
     formatter: colored_console
     stream: ext://sys.stdout
   file:
-    class: logging.FileHandler
+    class: logging.handlers.RotatingFileHandler
     level: TRACE
-    filename: /tmp/log
+    formatter: simple
+    filename: ./python.log
+    maxBytes: 10485760 # 10MB
+    backupCount: 1
+    encoding: utf8
 root:
   level: TRACE
   handlers: [console,file]
