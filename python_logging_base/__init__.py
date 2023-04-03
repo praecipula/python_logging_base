@@ -399,6 +399,7 @@ def addLoggingLevel(levelName, levelNum, methodName=None):
     setattr(logging, methodName, logToRoot)
 
 addLoggingLevel("TRACE", logging.DEBUG - 5)
+addLoggingLevel("TODO", logging.TRACE - 2)
 
 
 logConfig = """
@@ -450,4 +451,6 @@ def ASSERT(condition_that_should_be_true=False, message="Unspecified", debug_on_
     if debug_on_fail:
         import pdb; pdb.set_trace()
     return condition_that_should_be_true # False by this point - it's not in fact true.
+
+TODO_LOG=logging.getLogger("TODO:")
 
