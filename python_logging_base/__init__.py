@@ -464,7 +464,7 @@ TODO_LOG=logging.getLogger("TODO:")
 # it by every N times.
 # So semantically, it's important to log, but not log-every-time important.
 todo_debounce_cache = {}
-todo_log_only_every_n = 20
+todo_log_only_every_n = 50
 def TODO(message="Something needs to be done"):
     global todo_debounce_cache
     if not todo_debounce_cache.get(message):
