@@ -285,7 +285,7 @@ class ConsoleFormatter(logging.Formatter):
         # Just colorize by level numbers.
         # Names might be more future proof, but we're relying on adding more levels in between
         # the standard ones and I don't want to add these level names in to this more general function.
-        if 0 <= record.levelno && record.levelno <= 5:
+        if 0 <= record.levelno and record.levelno <= 5:
             return ConsoleFormatter.term_256_color(token, 'yellow4', 'grey11')
         elif record.levelno <= logging.DEBUG:
             return ConsoleFormatter.term_256_color(token, 'darkgreen', 'grey11')
