@@ -398,8 +398,8 @@ def addLoggingLevel(levelName, levelNum, methodName=None):
     setattr(logging.getLoggerClass(), methodName, logForLevel)
     setattr(logging, methodName, logToRoot)
 
+addLoggingLevel("TODO", logging.DEBUG - 2)
 addLoggingLevel("TRACE", logging.DEBUG - 5)
-addLoggingLevel("TODO", logging.TRACE - 2)
 
 
 logConfig = """
@@ -436,6 +436,7 @@ def example_logs():
 # Test out logging level printing / report to terminal what they look like
     LOG = logging.getLogger("python_logging_base.LOG")
     LOG.trace("This is a TRACE message")
+    LOG.todo("This is a TODO message")
     LOG.debug("This is a DEBUG message")
     LOG.info("This is a INFO message")
     LOG.warning("This is a WARNING message")
@@ -448,10 +449,12 @@ ASSERT_LOG= logging.getLogger("ASSERT")
 def ASSERT(condition_that_should_be_true=False, message="Unspecified", debug_on_fail=True):
     if condition_that_should_be_true:
         return True
-    LOG.critical(f"Failed assert: {message}")
+    ASSERT_LOG.critical(f"Failed assert: {message}")
     if debug_on_fail:
         import pdb; pdb.set_trace()
     return condition_that_should_be_true # False by this point - it's not in fact true.
 
 TODO_LOG=logging.getLogger("TODO:")
 
+def TODO(message="Something needs to be done"):
+    TODO_LOG.todo(message)
