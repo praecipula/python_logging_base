@@ -282,12 +282,15 @@ class ConsoleFormatter(logging.Formatter):
 
     @staticmethod
     def colorize_levelname(record, token):
-        # Colorize on levelno instead to handle future names (will show up with different level name but same
-        # color as next highest level
-        if record.levelno < logging.DEBUG:
+        # Just colorize by level numbers.
+        # Names might be more future proof, but we're relying on adding more levels in between
+        # the standard ones and I don't want to add these level names in to this more general function.
+        if 0 <= record.levelno && record.levelno <= 5:
             return ConsoleFormatter.term_256_color(token, 'yellow4', 'grey11')
-        if record.levelno == logging.DEBUG:
+        elif record.levelno <= logging.DEBUG:
             return ConsoleFormatter.term_256_color(token, 'darkgreen', 'grey11')
+        elif record.levelno <= 13:
+            return ConsoleFormatter.term_256_color(token, 'yellow', 'grey30')
         elif record.levelno <= logging.INFO:
             return ConsoleFormatter.term_256_color(token, 'navy', )
         elif record.levelno <= logging.WARN:
@@ -398,8 +401,8 @@ def addLoggingLevel(levelName, levelNum, methodName=None):
     setattr(logging.getLoggerClass(), methodName, logForLevel)
     setattr(logging, methodName, logToRoot)
 
-addLoggingLevel("TODO", logging.DEBUG - 2)
-addLoggingLevel("TRACE", logging.DEBUG - 5)
+addLoggingLevel("TODO", logging.DEBUG + 2)      # De facto level "12"
+addLoggingLevel("TRACE", logging.DEBUG - 5)     # De facto level "5"
 
 
 logConfig = """
