@@ -459,5 +459,20 @@ def ASSERT(condition_that_should_be_true=False, message="Unspecified", debug_on_
 
 TODO_LOG=logging.getLogger("TODO:")
 
+# The todo log is intentionally noisy (just below INFO level).
+# However, we don't need constant reminders of our todos, so let's debounce
+# it by every N times.
+# So semantically, it's important to log, but not log-every-time important.
+todo_debounce_cache = {}
+todo_log_only_every_n = 20
 def TODO(message="Something needs to be done"):
-    TODO_LOG.todo(message)
+    global todo_debounce_cache
+    if not todo_debounce_cache.get(message):
+        # We'll init to 0 so we log the first time
+        todo_debounce_cache[message] = 0
+    todo_debounce_cache[message] -= 1
+    if todo_debounce_cache[message] <= 0:
+        TODO_LOG.todo(message)
+        todo_debounce_cache[message] = todo_log_only_every_n
+        return True
+    return False
