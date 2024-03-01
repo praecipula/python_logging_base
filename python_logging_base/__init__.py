@@ -459,13 +459,13 @@ def ASSERT(condition_that_should_be_true=False, exc_or_message="Unspecified", de
     if isinstance(exc_or_message, Exception):
         exc = exc_or_message
         ASSERT_LOG.critical(f"Failed exception: {type(exc)}, {str(exc)}")
-        if debug_on_fail and DEBUG_ON_ASSERT:
+        if debug_on_fail and ENABLE_DEBUG_ON_ASSERT:
             import pdb; pdb.set_trace()
         raise exc
     else:
         message = exc_or_message
         ASSERT_LOG.critical(f"Failed assert: {message}")
-        if debug_on_fail and DEBUG_ON_ASSERT:
+        if debug_on_fail and ENABLE_DEBUG_ON_ASSERT:
             import pdb; pdb.set_trace()
         return condition_that_should_be_true # False by this point - it's not in fact true.
 
