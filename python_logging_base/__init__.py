@@ -420,12 +420,12 @@ formatters:
 handlers:
   console:
     class: logging.StreamHandler
-    level: TRACE3
+    level: TRACE2
     formatter: colored_console
     stream: ext://sys.stdout
   file:
     class: logging.handlers.RotatingFileHandler
-    level: TRACE3
+    level: TRACE2
     formatter: simple
     filename: ./python.log
     maxBytes: 10485760 # 10MB
@@ -520,6 +520,13 @@ def TODO(message="Something needs to be done"):
     return False
 
 WHERE_LOG=logging.getLogger("WHERE:")
+def enable_where_logging():
+    WHERE_LOG.level = logging.TRACE2
+
+def disable_where_logging():
+    WHERE_LOG.level = logging.TRACE3
+
+disable_where_logging()
 def WHERE():
     frm = inspect.currentframe().f_back
     info = inspect.getframeinfo(frm)
