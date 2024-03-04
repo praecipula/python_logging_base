@@ -1,6 +1,7 @@
 import logging.config
 import yaml
 import re
+import inspect
 
 ##  LOGGING SETUP
 class ConsoleFormatter(logging.Formatter):
@@ -440,6 +441,8 @@ logging.config.dictConfig(yaml.load(logConfig, Loader=yaml.FullLoader))
 def example_logs():
 # Test out logging level printing / report to terminal what they look like
     LOG = logging.getLogger("python_logging_base.LOG")
+    LOG.trace3("This is a TRACE3 message")
+    LOG.trace2("This is a TRACE2 message")
     LOG.trace("This is a TRACE message")
     LOG.todo("This is a TODO message")
     LOG.debug("This is a DEBUG message")
@@ -515,3 +518,12 @@ def TODO(message="Something needs to be done"):
         todo_debounce_cache[message] = todo_log_only_every_n
         return True
     return False
+
+def WHERE():
+    frm = inspect.currentframe().f_back
+    info = inspect.getframeinfo(frm)
+    m = { 'filename': info.filename[-20:],
+         'function': info.function[-13:] + "()",
+         'lineno': info.lineno}
+
+    LOG.trace3("[\"%(filename)20.20s\":%(function)-15.15s@%(lineno)5.5s]", m)
