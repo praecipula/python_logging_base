@@ -519,6 +519,7 @@ def TODO(message="Something needs to be done"):
         return True
     return False
 
+WHERE_LOG=logging.getLogger("WHERE:")
 def WHERE():
     frm = inspect.currentframe().f_back
     info = inspect.getframeinfo(frm)
@@ -526,4 +527,4 @@ def WHERE():
          'function': info.function[-13:] + "()",
          'lineno': info.lineno}
 
-    LOG.trace3("[\"%(filename)20.20s\":%(function)-15.15s@%(lineno)5.5s]", m)
+    WHERE_LOG.trace3("\"%(filename)20.20s\":%(function)-15.15s@%(lineno)5.5s", m)
