@@ -402,7 +402,9 @@ def addLoggingLevel(levelName, levelNum, methodName=None):
     setattr(logging, methodName, logToRoot)
 
 addLoggingLevel("TODO", logging.DEBUG + 2)      # De facto level "12"
-addLoggingLevel("TRACE", logging.DEBUG - 5)     # De facto level "5"
+addLoggingLevel("TRACE", logging.DEBUG - 5)     # De facto level "5", i.e. like -v switch
+addLoggingLevel("TRACE2", logging.DEBUG - 6)     # De facto level "4", i.e. like -vv switch
+addLoggingLevel("TRACE3", logging.DEBUG - 7)     # De facto level "3", i.e. like -vvv insane mode switch
 
 
 logConfig = """
@@ -417,19 +419,19 @@ formatters:
 handlers:
   console:
     class: logging.StreamHandler
-    level: TRACE
+    level: TRACE3
     formatter: colored_console
     stream: ext://sys.stdout
   file:
     class: logging.handlers.RotatingFileHandler
-    level: TRACE
+    level: TRACE3
     formatter: simple
     filename: ./python.log
     maxBytes: 10485760 # 10MB
     backupCount: 1
     encoding: utf8
 root:
-  level: TRACE
+  level: TRACE3
   handlers: [console,file]
 """
 
