@@ -521,10 +521,10 @@ def TODO(message="Something needs to be done"):
 
 WHERE_LOG=logging.getLogger("WHERE:")
 def enable_where_logging():
-    WHERE_LOG.level = logging.TRACE2
+    WHERE_LOG.level = logging.TRACE3
 
 def disable_where_logging():
-    WHERE_LOG.level = logging.TRACE3
+    WHERE_LOG.level = logging.TRACE2
 
 disable_where_logging()
 def WHERE():
