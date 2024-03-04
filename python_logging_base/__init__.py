@@ -410,9 +410,9 @@ version: 1
 disable_existing_loggers: true
 formatters:
   simple:
-    format: '[%(asctime)24.24s - %(name)-20.20s - %(levelname)5.5s] %(message)s'
+    format: '[%(asctime)24.24s<%(name)-15.15s@%(threadName)10.10s> %(levelname)5.5s] %(message)s'
   colored_console:
-    format: '[%(asctime)24.24s - %(name)-20.20s - %(levelname)5.5s] %(message)s'
+    format: '[%(asctime)24.24s<%(name)-15.15s@%(threadName)10.10s> %(levelname)5.5s] %(message)s'
     '()': python_logging_base.ConsoleFormatter
 handlers:
   console:
@@ -452,21 +452,46 @@ ASSERT_LOG= logging.getLogger("ASSERT")
 # The semantics are this will NOT debug when debug_on_fail is true if this is
 # set to false.
 ENABLE_DEBUG_ON_ASSERT=True
-# This can be called with no arguments to log and trigger a debugger.
+ENABLE_RAISE_ON_ASSERT=False
+class AssertionFailed(Exception):
+    pass
+
 def ASSERT(condition_that_should_be_true=False, exc_or_message="Unspecified", debug_on_fail=True):
+    """
+    Assertion handling that also logs the assert.
+
+    There are a few main modes to use with this:
+    ASSERT(condition, message)
+    - Assert condition is true, log the message. if global ENABLE_DEBUG_ON_ASSERT is true, enter debugger.
+    ASSERT(condition, message, False)
+    - Assert condition is true, log the message. Do not debug (regardless of ENABLE_DEBUG_ON_ASSERT)
+    ASSERT(False, exception)
+    - Throw the exception, except also log and maybe debug it.
+    """
     if condition_that_should_be_true:
+        # Everything is fine! Return.
         return True
     if isinstance(exc_or_message, Exception):
+        # If we passed an exception in the message field...
+        # This usually looks like "ASSERT-handle this exception with no test", e.g.
+        # try:
+        #   something
+        # except IndexError as exc:
+        #   ASSERT(False, exc) # <<<==== We want to always log and maybe start a debugger and _then_ raise.
         exc = exc_or_message
         ASSERT_LOG.critical(f"Failed exception: {type(exc)}, {str(exc)}")
         if debug_on_fail and ENABLE_DEBUG_ON_ASSERT:
             import pdb; pdb.set_trace()
+        # Always re-raise this case, no matter what ENABLE_RAISE_ON_ASSERT is.
         raise exc
     else:
+        # Failed with a message.
         message = exc_or_message
         ASSERT_LOG.critical(f"Failed assert: {message}")
         if debug_on_fail and ENABLE_DEBUG_ON_ASSERT:
             import pdb; pdb.set_trace()
+        if ENABLE_RAISE_ON_ASSERT:
+            raise AssertionFailed(message)
         return condition_that_should_be_true # False by this point - it's not in fact true.
 
 TODO_LOG=logging.getLogger("TODO:")
