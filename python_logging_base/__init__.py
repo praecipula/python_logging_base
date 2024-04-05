@@ -413,9 +413,9 @@ version: 1
 disable_existing_loggers: true
 formatters:
   simple:
-    format: '[%(asctime)24.24s<%(name)-15.15s@%(threadName)10.10s> %(levelname)5.5s] %(message)s'
+    format: '[%(asctime)24.24s<%(name)-15.15s@%(threadName)10.10s> %(levelname)6.6s] %(message)s'
   colored_console:
-    format: '[%(asctime)24.24s<%(name)-15.15s@%(threadName)10.10s> %(levelname)5.5s] %(message)s'
+    format: '[%(asctime)24.24s<%(name)-15.15s@%(threadName)10.10s> %(levelname)6.6s] %(message)s'
     '()': python_logging_base.ConsoleFormatter
 handlers:
   console:
